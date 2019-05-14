@@ -50,5 +50,11 @@ Route::group(['middleware' => 'auth'], function(){
        'uses'   => 'CommentsController@submit'
     ]);
 
+    //test
+    Route::get('/test', [
+       'as' => 'tickets.test',
+        'uses' => 'TicketsController@test'
+    ]);
+
 
 });

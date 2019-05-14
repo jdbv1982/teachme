@@ -7,12 +7,24 @@ use TeachMe\Http\Requests;
 use TeachMe\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use TeachMe\Repositories\TicketRepository;
 
 class TicketsController extends Controller {
 
+    /**
+     * @var TicketRepository
+     */
+    private $ticketRepository;
+
+    public function __construct(TicketRepository $ticketRepository)
+    {
+        $this->ticketRepository = $ticketRepository;
+    }
+
+
     public function latest()
     {
-        $tickets = Ticket::orderBy('created_at','DESC')->paginate();
+        $tickets = $this->ticketRepository->paginateLatest();
 
         return view('tickets/list', compact('tickets'));
 	}
@@ -24,14 +36,20 @@ class TicketsController extends Controller {
 
     public function open()
     {
-        $tickets = Ticket::where('status','open')->orderBy('created_at','DESC')->paginate();
+        $tickets = $this->selectTicketsList()
+            ->where('status','open')
+            ->orderBy('created_at','DESC')
+            ->paginate();
 
         return view('tickets/list', compact('tickets'));
 	}
 
     public function closed()
     {
-        $tickets = Ticket::where('status','closed')->orderBy('created_at','DESC')->paginate();
+        $tickets = $this->selectTicketsList()
+            ->where('status','closed')
+            ->orderBy('created_at','DESC')
+            ->paginate();
 
         return view('tickets/list', compact('tickets'));
 	}
@@ -68,5 +86,12 @@ class TicketsController extends Controller {
 
         return Redirect::route('tickets.details', $ticket->id);
 
+	}
+
+    public function test()
+    {
+        $tickets = $this->ticketRepository->paginateLatest(100);
+
+        return view('tickets/test', compact('tickets'));
 	}
 }

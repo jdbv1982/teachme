@@ -22,7 +22,8 @@ class TicketTableSeeder extends BaseSeeder
         return [
             'title' => $faker->sentence(),
             'status'=> $faker->randomElement(['open','open','closed']),
-            'user_id' => $this->getRandom('User')->id
+            'user_id' => $this->getRandom('User')->id,
+            'created_at' => $faker->dateTimeBetween('now','+1 days')
         ];
     }
 

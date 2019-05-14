@@ -141,6 +141,7 @@ return [
          */
 
         'TeachMe\Providers\HtmlServiceProvider',
+        'Barryvdh\Debugbar\ServiceProvider',
 
 		/*
 		 * Application Service Providers...
@@ -150,6 +151,7 @@ return [
 		'TeachMe\Providers\ConfigServiceProvider',
 		'TeachMe\Providers\EventServiceProvider',
 		'TeachMe\Providers\RouteServiceProvider',
+
 
 	],
 
@@ -200,6 +202,7 @@ return [
 		'View'      => 'Illuminate\Support\Facades\View',
         'Form'      => 'Collective\Html\FormFacade',
         'Html'      => 'Collective\Html\HtmlFacade',
+        'Debugbar' => 'Barryvdh\Debugbar\Facade',
 
 	],
 

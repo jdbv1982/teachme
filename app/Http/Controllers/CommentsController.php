@@ -23,8 +23,6 @@ class CommentsController extends Controller {
 
         session()->flash('success', 'Tu comentario fue guardado exitosamente');
         return redirect()->back();
-
-        dd($ticket->comments);
 	}
 
 }
