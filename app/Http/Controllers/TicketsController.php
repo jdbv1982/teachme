@@ -25,7 +25,6 @@ class TicketsController extends Controller {
     public function latest()
     {
         $tickets = $this->ticketRepository->paginateLatest();
-
         return view('tickets/list', compact('tickets'));
 	}
 
@@ -36,27 +35,19 @@ class TicketsController extends Controller {
 
     public function open()
     {
-        $tickets = $this->selectTicketsList()
-            ->where('status','open')
-            ->orderBy('created_at','DESC')
-            ->paginate();
-
+        $tickets = $this->ticketRepository->paginateOpen();
         return view('tickets/list', compact('tickets'));
 	}
 
     public function closed()
     {
-        $tickets = $this->selectTicketsList()
-            ->where('status','closed')
-            ->orderBy('created_at','DESC')
-            ->paginate();
-
+        $tickets = $this->ticketRepository->paginateClosed();
         return view('tickets/list', compact('tickets'));
 	}
 
     public function details($id)
     {
-        $ticket = Ticket::findOrFail($id);
+        $ticket = $this->ticketRepository->findOrFail($id);
         return view('tickets/details', compact('ticket'));
 	}
 
@@ -65,24 +56,16 @@ class TicketsController extends Controller {
         return view('tickets.create');
 	}
 
-    public function store(Request $request, Guard $auth)
+    public function store(Request $request)
     {
         $this->validate($request, [
            'title' => 'required|max:120'
         ]);
 
-        $ticket = $auth->user()->tickets()->create([
-            'title'     => $request->get('title'),
-            'status'    => 'open'
-        ]);
-
-        /*
-        $ticket = new Ticket();
-        $ticket->title = $request->get('title');
-        $ticket->status = 'open';
-        $ticket->user_id = $auth->user()->id;
-        $ticket->save();
-        */
+        $ticket = $this->ticketRepository->openNew(
+            currentUser(),
+            $request->get('title')
+        );
 
         return Redirect::route('tickets.details', $ticket->id);
 
